@@ -90,6 +90,7 @@ spec:
                   key: {{ .Values.global.gossipEncryption.secretKey }}
             {{- end }}
             {{- include "consul.extraEnvironmentVars" .Values.client | nindent 12 }}
+# https://github.com/hashicorp/consul/issues/6098 -- port issue
           command:
             - "/bin/sh"
             - "-ec"
@@ -125,7 +126,7 @@ spec:
                 {{- else }}
                 {{- if .Values.server.enabled }}
                 {{- range $index := until (.Values.server.replicas | int) }}
-                -retry-join=${CONSUL_FULLNAME}-server-{{ $index }}.${CONSUL_FULLNAME}-server.${NAMESPACE}.svc \
+                -retry-join=${CONSUL_FULLNAME}-server-{{ $index }}.${CONSUL_FULLNAME}-server.${NAMESPACE}.svc:8301 \
                 {{- end }}
                 {{- end }}
                 {{- end }}
@@ -155,6 +156,9 @@ spec:
             - containerPort: 8500
               hostPort: 8500
               name: http
+            - containerPort: 8501
+              hostPort: 8501
+              name: https
             - containerPort: 8502
               hostPort: 8502
               name: grpc

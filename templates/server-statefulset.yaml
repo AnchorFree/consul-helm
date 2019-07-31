@@ -73,6 +73,10 @@ spec:
         - name: consul
           image: "{{ default .Values.global.image .Values.server.image }}"
           env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -97,6 +101,7 @@ spec:
 
               exec /bin/consul agent \
                 -advertise="${POD_IP}" \
+                -advertise-wan="${HOST_IP}" \
                 -bind=0.0.0.0 \
                 -bootstrap-expect={{ .Values.server.bootstrapExpect }} \
                 -client=0.0.0.0 \
@@ -142,11 +147,15 @@ spec:
           ports:
             - containerPort: 8500
               name: http
+            - containerPort: 8501
+              name: https
             - containerPort: 8301
               name: serflan
             - containerPort: 8302
+              hostPort: 8302
               name: serfwan
             - containerPort: 8300
+              hostPort: 8300
               name: server
             - containerPort: 8600
               name: dns-tcp
