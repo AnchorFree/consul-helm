@@ -126,7 +126,7 @@ spec:
                 {{- else }}
                 {{- if .Values.server.enabled }}
                 {{- range $index := until (.Values.server.replicas | int) }}
-                -retry-join=${CONSUL_FULLNAME}-server-{{ $index }}.${CONSUL_FULLNAME}-server.${NAMESPACE}.svc:8301 \
+                -retry-join=${CONSUL_FULLNAME}-server-{{ $index }}.${CONSUL_FULLNAME}-server.${NAMESPACE}.svc \
                 {{- end }}
                 {{- end }}
                 {{- end }}
@@ -154,7 +154,6 @@ spec:
                 - consul leave
           ports:
             - containerPort: 8500
-              hostPort: 8500
               name: http
             - containerPort: 8501
               hostPort: 8501
