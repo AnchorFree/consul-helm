@@ -47,6 +47,10 @@ spec:
 
               consul-k8s inject-connect \
                 -default-inject={{ .Values.connectInject.default }} \
+                -consul-cacert={{ .Values.connectInject.caSecret }}:/etc/secrets/ca.crt \
+                -consul-http-ssl=true \
+                -consul-grpc-ssl=true \
+                -consul-tls-server-name={{ .Values.connectInject.tlsServerName }} \
                 -consul-image="{{ default .Values.global.image .Values.connectInject.imageConsul }}" \
                 {{ if .Values.connectInject.imageEnvoy -}}
                 -envoy-image="{{ .Values.connectInject.imageEnvoy }}" \
