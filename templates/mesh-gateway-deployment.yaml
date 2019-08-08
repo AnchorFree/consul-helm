@@ -118,6 +118,10 @@ spec:
                   name: "{{ .Release.Name }}-consul-mesh-gateway-acl-token"
                   key: "token"
             {{- end}}
+            {{- if .Values.meshGateway.token }}
+            - name: CONSUL_HTTP_TOKEN
+              value: {{ .Values.meshGateway.token }}
+            {{- end}}
           command:
             # /bin/sh -c is needed so we can use the pod-specific environment
             # variables.

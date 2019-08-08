@@ -419,6 +419,9 @@ meshGateway:
   # Requirements: consul >= 1.6.0 and consul-k8s >= 0.9.0 if using global.bootstrapACLs.
   enabled: false
 
+  # If you did not choose to bootstrap ACL, then you must provide
+  # token for the mesh gateway
+  token: null
   # Globally configure which mode the gateway should run in.
   # Can be set to either "remote", "local", "none" or empty string or null.
   # See https://consul.io/docs/connect/mesh_gateway.html#modes-of-operation for
